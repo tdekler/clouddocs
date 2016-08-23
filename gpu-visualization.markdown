@@ -3,7 +3,7 @@ layout: default
 ---
 
 # Remote Visualization Guide for HPC Cloud
-In this guide we will describe how to setup and use remote interactive visualization on the HPC Cloud. It allows the user of the HPC cloud to fully use virtual machines equipped with GPUs for interactive rendering, with the result being transferred over the internet to their own local laptop or desktop.
+In this guide we will describe how to setup and use remote interactive visualization on the HPC Cloud. It allows the user of the HPC cloud to use virtual machines equipped with GPUs for interactive rendering, with the result being transferred over the internet to their own local laptop or desktop.
 
 ![Remote interactive visualization](images/gpu/rvs_cloud.png)
 
@@ -11,7 +11,7 @@ In this guide we will describe how to setup and use remote interactive visualiza
 
 By default, you will not have access to the GPU nodes of the HPC Cloud. In order to get this, please send an e-mail to [helpdesk@surfsara.nl](mailto:helpdesk@surfsara.nl).
 
-If GPU access has been enabled for your account, you will have to use a [datastore](image_storage) that is enabled on the GPU nodes. This datastore is called `images_ssd_gpu` and behaves the same way as the `local_images_ssd` datastore, except that it is accessible on the GPU nodes only. In other words, using this datastore makes sure that your VM is run on the nodes which have GPU's installed on them.
+If GPU access has been enabled for your account, you will have to use a [datastore](image_storage) that is enabled on the GPU nodes. This datastore is called `images_ssd_gpu` and behaves the same way as the `local_images_ssd` datastore, except that it is accessible on the GPU nodes only. In other words, using this datastore makes sure that your VM runs on the nodes which have GPU's installed on them.
 
 Note that the `ceph` datastore is also enabled on the GPU nodes. However, as described [here](image_storage), it is best to put your OS image on either the `local_images_ssd` or the `images_ssd_gpu` datastore. `ceph` can then be used for larger data images and for persistent data.
 
