@@ -13,7 +13,6 @@ In order to run Windows on a VM, you will need to proceed with the full installa
 1. Run the Windows installation
 1. Configure contextualization
 1. Prepare your VM for production
-  1. Enable Remote Desktop
 
 Let us look into these steps with more detail.
 
@@ -35,41 +34,41 @@ In this section we will be setting up the environment within your project (or _G
 
 Analogously to your laptop, your VM needs a hard drive where the operating system can be installed and where it will live. We will create one here.
 
-1. **On the UI:** Go to the _Images_ tab (under _Virtual Resources_), and click on the green _[+]_ button (on the top-left corner of the screen) to start creating a new `image`. A form will pop up.
+1. **On the UI:** Go to the _Images_ tab (under _Storage_), and click on the green _[+]_ button (on the top-left corner of the screen) to start creating a new `image`. A form will pop up.
 1. **On the UI:** On the form that popped up:
   * type in a meaningful _Name_ (e.g.: **windows_drive**, we will use this name later)
   * type in a meaningful _Description_ (optional)
   * choose _Type_ _DATABLOCK_
-  * leave _Datastore_ with _104: local_images_ssd_
-  * check the _Persistent_ checkbox
-  * on the _Image location:_ group, choose radio button _Empty datablock_
+  * leave _Datastore_ with _101: local_images_ssd_
+  * check the _This image is persistent_ checkbox
+  * on the _Image location:_ group, choose radio button _Empty disk image_
   * and give it a _Size_ that is meaningful to you (e.g.: our test with installing Windows 8.1 required already 10GB for Windows alone, so we filled in 20GB)
 1. **On the UI:** Click the green button _Create_ on the form, to submit it. A new `image` will show on the _Images_ list, and it will keep in status _LOCKED_ while it is being created. When it is created it will come to status _READY_.
 
 ### Uploading the Windows ISO
 
-1. **On the UI:** On the _Images_ tab (under _Virtual Resources_), click on the green _[+]_ button (on the top-left corner of the screen) to start creating a new `image`. A form will pop up.
+1. **On the UI:** On the _Images_ tab (under _Storage_), click on the green _[+]_ button (on the top-left corner of the screen) to start creating a new `image`. A form will pop up.
 1. **On the UI:** On the form that popped up:
   * type in a meaningful _Name_ (e.g.: **windows_iso**, we will use this name later)
   * type in a meaningful _Description_ (optional)
-  * choose _Type_ _CDROM_
-  * leave _Datastore_ with _104: local_images_ssd_
+  * choose _Type_ _Readonly CD-ROM_
+  * leave _Datastore_ with _101: local_images_ssd_
   * leave the _Persistent_ checkbox unchecked
-  * on the _Image location:_ group, choose radio button _Upload_; then, underneath, click on _Choose file_ to have a dialogue pop up where you will look for the path on your laptop where you have your Windows .iso file and, finally, choose the .iso file to close the pop-up dialogue to return ton the original form 
+  * on the _Image location:_ group, choose radio button _Upload_; then, underneath, click on _Choose file_ to have a dialogue pop up where you will look for the path on your laptop where you have your Windows .iso file and, finally, choose the .iso file to close the pop-up dialogue to return to the original form 
 1. **On the UI:** Click the green button _Create_ on the form, to submit it. A progress bar will show at the bottom of the screen, which will advance as the upload of your .iso file evolves. When the upload is complete, a new `image` will show on the _Images_ list, and it will keep in status _LOCKED_ while it is being created. When it is created it will come to status _READY_.
 
 ### Fetching the Virtio drivers
 
 The best way to make physical hardware (namely: hard drives and network adapters) available to VMs in the HPC Cloud is by using Virtio drivers. However, Windows does not natively support those drivers, but if we make them available to the Windows installer, we will have no problem using them. This requires making them available externally, and that is what we will do in this step.
 
-1. **On the UI:** On the _Images_ tab (under _Virtual Resources_), click on the green _[+]_ button (on the top-left corner of the screen) to start creating a new `image`. A form will pop up.
+1. **On the UI:** On the _Images_ tab (under _Storage_), click on the green _[+]_ button (on the top-left corner of the screen) to start creating a new `image`. A form will pop up.
 1. **On the UI:** On the form that popped up:
   * type in a meaningful _Name_ (e.g.: **virtio_drivers_iso**, we will use this name later)
   * type in a meaningful _Description_ (optional)
-  * choose _Type_ _CDROM_
-  * leave _Datastore_ with _104: local_images_ssd_
+  * choose _Type_ _Readonly CD-ROM_
+  * leave _Datastore_ with _101: local_images_ssd_
   * leave the _Persistent_ checkbox unchecked
-  * on the _Image location:_ group, choose radio button _Provide a path_; then, underneath, type the following URL in the _Path_ field: https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/stable-virtio/virtio-win.iso
+  * on the _Image location:_ group, choose radio button _Path in OpenNebula server_; then, underneath, type the following URL in the _Path_ field: https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/stable-virtio/virtio-win.iso
 1. **On the UI:** Click the green button _Create_ on the form, to submit it. A new `image` will show on the _Images_ list, and it will keep in status _LOCKED_ while data is being downloaded from the URL you wrote. When it is created it will come to status _READY_.
 
 ### Fetching the contextualization files
@@ -83,75 +82,75 @@ The best way to make physical hardware (namely: hard drives and network adapters
 
 On the HPC Cloud, VMs use the [contextualization](contextualization) mechanism to configure themselves. In particular, you will need to have 2 files on your VM so that it can actually configure itself. We will be making those available in this step so that, at a later step, we can make your VM use them. 
 
-1. **On the UI:** On the _Files & Kernels_ tab (under _Virtual Resources_), click on the green _[+]_ button (on the top-left corner of the screen) to start creating a new `file`. A form will pop up.
+1. **On the UI:** On the _Files_ tab (under _Storage_), click on the green _[+]_ button (on the top-left corner of the screen) to start creating a new `file`. A form will pop up.
 1. **On the UI:** On the form that popped up:
   * type in _Name_: **context.ps1** (we will use this name later)
   * type in a meaningful _Description_ (optional)
   * choose _Type_ _CONTEXT_
-  * leave _Datastore_ with _105: local_files_ssd_
-  * on the _Image location:_ group, choose radio button _Provide a path_; then, underneath, type the following URL in the _Path_ field: https://raw.githubusercontent.com/OpenNebula/addon-context-windows/master/context.ps1
+  * leave _Datastore_ with _102: local_files_ssd_
+  * on the _Image location:_ group, choose radio button _Path in OpenNebula server_; then, underneath, type the following URL in the _Path_ field: https://raw.githubusercontent.com/OpenNebula/addon-context-windows/master/context.ps1
 1. **On the UI:** Click the green button _Create_ on the form, to submit it. A new `file` will show on the _Files_ list, and it will keep in status _LOCKED_ while data is being downloaded from the URL you wrote. When it is created it will come to status _READY_. 
 
 Now, the other `file:
 
-1. **On the UI:** On the _Files & Kernels_ tab (under _Virtual Resources_), click on the green _[+]_ button (on the top-left corner of the screen) to start creating a new `file`. A form will pop up.
+1. **On the UI:** On the _Files_ tab (under _Storage_), click on the green _[+]_ button (on the top-left corner of the screen) to start creating a new `file`. A form will pop up.
 1. **On the UI:** On the form that popped up:
   * type in a meaningful _Name_ (e.g.: **startup.vbs**, we will use this name later)
   * type in a meaningful _Description_ (optional)
   * choose _Type_ _CONTEXT_
-  * leave _Datastore_ with _105: local_files_ssd_
-  * on the _Image location:_ group, choose radio button _Provide a path_; then, underneath, type the following URL in the _Path_ field: https://raw.githubusercontent.com/OpenNebula/addon-context-windows/master/startup.vbs
+  * leave _Datastore_ with _102: local_files_ssd_
+  * on the _Image location:_ group, choose radio button _Path in OpenNebula server_; then, underneath, type the following URL in the _Path_ field: https://raw.githubusercontent.com/OpenNebula/addon-context-windows/master/startup.vbs
 1. **On the UI:** Click the green button _Create_ on the form, to submit it. A new `file` will show on the _Files_ list, and it will keep in status _LOCKED_ while data is being downloaded from the URL you wrote. When it is created it will come to status _READY_. 
 
 If we leave it here, then you VM will be configured only once ever. If you want the VM to be reconfigured every time it boots, then you need to delete a _flag_ file that prevents contextualisation from happening ever again. We have added a script that will delete this file for you every time Windows shuts down or reboots. Here is how you add it:
 
-1. **On the UI:** On the _Files & Kernels_ tab (under _Virtual Resources_), click on the green _[+]_ button (on the top-left corner of the screen) to start creating a new `file`. A form will pop up.
+1. **On the UI:** On the _Files_ tab (under _Storage_), click on the green _[+]_ button (on the top-left corner of the screen) to start creating a new `file`. A form will pop up.
 1. **On the UI:** On the form that popped up:
   * type in a meaningful _Name_ (e.g.: **shutdown.vbs**, we will use this name later)
   * type in a meaningful _Description_ (optional)
   * choose _Type_ _CONTEXT_
-  * leave _Datastore_ with _105: local_files_ssd_
-  * on the _Image location:_ group, choose radio button _Provide a path_; then, underneath, type the following URL in the _Path_ field: https://raw.githubusercontent.com/sara-nl/clouddocs/gh-pages/assets/shutdown.vbs
+  * leave _Datastore_ with _102: local_files_ssd_
+  * on the _Image location:_ group, choose radio button _Path in OpenNebula server_; then, underneath, type the following URL in the _Path_ field: https://raw.githubusercontent.com/sara-nl/clouddocs/gh-pages/assets/shutdown.vbs
 1. **On the UI:** Click the green button _Create_ on the form, to submit it. A new `file` will show on the _Files_ list, and it will keep in status _LOCKED_ while data is being downloaded from the URL you wrote. When it is created it will come to status _READY_. 
 
 ### Create a template
 
 Now that we have all components ready in the UI, we are ready to bring them together. On the HPC Cloud, we do that on a `template`.
 
-1. **On the UI:** On the _Templates_ tab (under _Virtual Resources_), click on the green _[+]_ button (on the top-left corner of the screen) to start creating a new `template`. The page will change into the _Create Template_ screen.
-1. **On the UI:** On the _Create Template_ screen, on the _General_ tab:
+1. **On the UI:** On the _VMs_ tab (under _Templates_), click on the green _[+]_ button (on the top-left corner of the screen) to start creating a new `template`. The page will change into the _Create VM Template_ screen.
+1. **On the UI:** On the _Create VM Template_ screen, on the _General_ tab:
   * type in a meaningful _Name_ (e.g.: **windows_setup**, we will use this name later)
   * type in a meaningful _Description_ (optional)
   * choose a _Logo_ that you like
-  * type in (or drag the slider) 8GB of _Memory_
-  * type in (or drag the slider) 1 CPU
-1. **On the UI:** On the same _Create Template_ screen, on the _Storage_ tab:
+  * type in (or use arrows) 8GB of _Memory_
+  * type in (or use arrows) 1 CPU
+1. **On the UI:** On the same _Create VM Template_ screen, on the _Storage_ tab:
   * for the _Disk 0_ (on the left column of the screen), choose the **windows_drive** `image` (from the table on the right of the screen) that you created as the first `image` of this guide
   * click on the _+ Add another disk_ button (that will make a new _Disk 1_), and then choose the **windows_iso** `image` you created as a second `image` of this guide
   * click again on the _+ Add another disk_ button (to make a new _Disk 2_), and then choose the **virtio_drivers_iso** `image`
-1. **On the UI:** On the same _Create Template_ screen, on the _Network_ tab:
+1. **On the UI:** On the same _Create VM Template_ screen, on the _Network_ tab:
   * for the _Interface 0_ (on the left column of the screen), choose the **internet** `network` (from the table on the right of the screen)
   * click on the _+ Add another nic_ button (that will make a new _Interface 1_), and then choose your internal `network` (it will be the only other `network ` that you can see on the right that is not called **internet**)
-1.  **On the UI:** On the same _Create Template_ screen, on the _OS Booting_ tab:
+1.  **On the UI:** On the same _Create VM Template_ screen, on the _OS Booting_ tab:
   * for the _1st Boot_ field, choose _CDROM_
   * for the _2nd Boot_ field, choose _HD_
 1.  **On the UI:** On the same _Create Template_ screen, on the _Input/Output_ tab:
   * click on the _VNC_ radio button
   * on the _Inputs group_, choose _Tablet_ on the first dropdown menu, then _USB_ on the second dropdown menu and finally click on the _Add_ button. A new entry will appear below those dropdowns with what you just selected.
-1.  **On the UI:** On the same _Create Template_ screen, on the _Context_ tab:
+1.  **On the UI:** On the same _Create VM Template_ screen, on the _Context_ tab:
   * click on _Files_ on the left column of the screen
-  * make sure you check the check boxes for the files you created before; those are: **context.ps1**,  **startup.vbs** and **shutdown.vbs**
+  * make sure you select the files you created before; those are: **context.ps1**,  **startup.vbs** and **shutdown.vbs**
 1. **On the UI:** We are ready defining the `template`, so click on the green _Create_ button at the top of the screen. A new `template` will show on the _Templates_ list.
 
 ## Run the Windows installation
 
 We will now create a VM and run the Windows installation on it.
 
-1. **On the UI:** Go to the _Virtual Machines_ tab (under _Virtual Resources_). Click on the green _[+]_ button (on the top-left corner of the screen) to start creating a new VM. A form will pop up.
-1. **On the UI:** On the form that popped up:
-  * type in a meaningful _Name_ (e.g.: **windows_first**)
+1. **On the UI:** Go to the _VMs_ tab (under _Instances_). Click on the green _[+]_ button (on the top-left corner of the screen) to start creating a new VM. The page will change into the _Create Virtual Machine_ screen.
+1. **On the UI:** On the _Create Virtual Machine_ screen:
   * choose the template you defined before (i.e.: windows_setup)
-1. **On the UI:** We are ready defining the VM, so click on the green _Create_ button at the bottom of the form. A new VM will show on the _Virtual Machines_ list. It will go through several states (e.g.: PENDING, PROLOG...) until it reaches the RUNNING state. 
+  * type in a meaningful _VM Name_ (e.g.: **windows_first**)
+1. **On the UI:** We are ready defining the VM, so click on the green _Create_ button at the top of the form. A new VM will show on the _Virtual Machines_ list. It will go through several states (e.g.: PENDING, PROLOG...) until it reaches the RUNNING state. Notice that to reach this state it can take a few minutes (circa 3' for current setup).
 1. **On the UI:** You can then start operating within your VM. Click on the _screen_-like button that you can see to the right of your VM on the list. It will pop-up the VNC console, so you should be able to see the welcome screen of your Windows installation.
 
 Now you need to install Windows with **custom** installation, by following the steps you would normally follow. Only, with one caveat: you need to install the Virtio drivers, as pointed out before. 
@@ -174,7 +173,7 @@ You can continue with the rest of the Windows installation process normally. The
 
 Once your freshly installed Windows starts, we will configure your VM so that it auto-configures itself on start up (e.g.: at this point, you can see that there is no active network connection, so you cannot even browse the web).
 
-1. **On the Windows VM:** Open a file explorer, and browse the _CONTEXT_ CD-ROM. You should be able to see at least 4 files on that CD-ROM. Three of them should be the ones we manually added to the _Context_ tab of the `template` some steps ago, called: _context.ps1_, _startup.vbs_ and _shutdown.vbs_.
+1. **On the Windows VM:** Open the file explorer, and browse the _CONTEXT_ CD-ROM. You should be able to see at least 4 files on that CD-ROM. Three of them should be the ones we manually added to the _Context_ tab of the `template` some steps ago, called: _context.ps1_, _startup.vbs_ and _shutdown.vbs_.
 1. **On the Windows VM:** From the _CONTEXT_ CD-ROM, copy the 3 files **context.ps1**, **startup.vbs** and **shutdown.vbs** to the `C:\` drive. They will thus become reachable at C:\context.ps1, C:\startup.vbs and C:\shutdown.vbs.
 1. **On the Windows VM:** We must configure the C:\startup.vbs file as a start-up script, so that Windows runs it automatically upon booting. We must also configure the C:\shutdown.vbs file as a _shutdown script_, so that Windows runs it automatically upon shutting down. To do all of this, start by right-clicking on the Windows _Start_ button, and then choose option _Run_. A dialogue will pop up.
 1. **On the Windows VM:** On the dialogue that just popped up, type the following in the _Open:_ field: `gpedit.msc`. A new window titled _Local Group Policy Editor_ will show.
@@ -186,27 +185,29 @@ Once your freshly installed Windows starts, we will configure your VM so that it
 1. **On the Windows VM:** On the _Shutdown Properties_ dialogue, click on the _Add_ button. A new _Add a Script_ dialogue will pop up.
 1. **On the Windows VM:** On the _Add a Script_ dialogue, click on the _Browse..._ button, and look there for the C:\shutdown.vbs file. A new entry will appear on the _Shutdown Properties_ dialogue indicating that you have added the new shutdown script. Click *OK* and *Apply*.
 1. **On the Windows VM:** You can reboot your Windows again. Make sure you have internet again.
-1. **On the UI:** You can now shut your VM down. We will remove all the installation media and prepare your VM for production.
+1. **On the UI:** You can now shut your VM down. Notice that OpenNebula will take some minutes to gracefuly shutdown the VM, similar time than when the VM was instantiated.
+
+We will proceed now with the removal of all the installation media and prepare your VM for production.
 
 ## Prepare the VM for production
 
 Once you have installed and configured your Windows, you do not need the installation media or files around any more. We will make a new `template` to use only the disk that we need.
 
 1. **On the UI:** Begin creating a new `template` the usual way.
-1. **On the UI:** On the _Create Template_ screen, on the _General_ tab:
+1. **On the UI:** On the _Create VM Template_ screen, on the _General_ tab:
   * type in a meaningful _Name_ (e.g.: **my_research_run**)
   * give it as much memory and as many CPU's as you need
-1. **On the UI:** On the same _Create Template_ screen, on the _Storage_ tab:
+1. **On the UI:** On the same _Create VM Template_ screen, on the _Storage_ tab:
   * for the _Disk 0_ (on the left column of the screen), choose the **windows_drive** `image` (from the table on the right of the screen) that you created as the first `image` of this guide, and where you have installed Windows
-1. **On the UI:** On the same _Create Template_ screen, on the _Network_ tab:
+1. **On the UI:** On the same _Create VM Template_ screen, on the _Network_ tab:
   * for the _Interface 0_ (on the left column of the screen), choose the **internet** `network` (from the table on the right of the screen)
   * click on the _+ Add another nic_ button (that will make a new _Interface 1_), and then choose your internal `network` (it will be the only other `network ` that you can see on the right that is not called **internet**)
-1.  **On the UI:** On the same _Create Template_ screen, on the _Input/Output_ tab:
+1.  **On the UI:** On the same _Create VM Template_ screen, on the _Input/Output_ tab:
   * click on the _VNC_ radio button
   * on the _Inputs_ group, choose _Tablet_ on the first dropdown menu, then _USB_ on the second dropdown menu and finally click on the _Add_ button. A new entry will appear below those dropdowns with what you just selected.
-1.  **On the UI:** On the same _Create Template_ screen, on the _Other_ tab, you want to tell Windows how to use multiple cores:
+1.  **On the UI:** On the same _Create VM Template_ screen, on the _Other_ tab, you want to tell Windows how to use multiple cores:
   * within the _RAW data_ group, choose for the _Type_ dropdown menu _kvm_, then in the _DATA_ textfield to the right of it, write `<cpu><topology sockets='1' cores='4' threads='1'/></cpu>` (you should replace the `cores` number with the amount of them you need).
-1. **On the UI:** We are ready defining the `template`, so click on the green _Create_ button at the top of the screen. A new `template` will show on the _Templates_ list.
+1. **On the UI:** We are ready defining the `template`, so click on the green _Create_ button at the top of the screen. A new `template` will show on the _VM Templates_ list.
 
 From now on, you will use this `template` to run your VM.
 
