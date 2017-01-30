@@ -7,6 +7,9 @@ In this guide we will describe how to setup and use remote interactive visualiza
 
 ![Remote interactive visualization](images/gpu/rvs_cloud.png)
 
+## Linux or Windows ##
+Remote Visualization is available for both linux and windows.The first part of this guide will cover general remote visualization and linux setup, the second part will cover the windows case.
+
 ## Getting access
 
 By default, you will not have access to the GPU nodes of the HPC Cloud. In order to get this, please send an e-mail to [helpdesk@surfsara.nl](mailto:helpdesk@surfsara.nl).
